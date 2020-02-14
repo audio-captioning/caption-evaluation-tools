@@ -241,22 +241,27 @@ def combine_single_and_per_file_metrics(single_metrics: Dict[str, float],
 def evaluate_metrics(prediction_file: Union[str, Path, List[Dict[str, str]]],
                      reference_file: Union[str, Path, List[Dict[str, str]]],
                      nb_reference_captions: int = 5) \
-        -> Dict[str, float]:
+        -> Dict[str, Dict[str, Union[float, Dict[str, float]]]]:
     """ Evaluates metrics from the predictions and reference captions.
 
     Evaluates BLEU1-4, CIDEr, METEOR, ROUGE_L, SPICE, and SPIDEr using
     code from https://github.com/tylin/coco-caption
 
-    :param prediction_file: Input file or predicted captions for all files \
-                            (as given by DictReader) with predicted captions.
+    :param prediction_file: Input file (or file contents, as given by DictReader) \
+                            with predicted captions
     :type prediction_file: Path | str | list[dict[str, str]]
-    :param reference_file: Input file or ground truth captions for all files \
-                           (as given by DictReader) with reference captions.
+    :param reference_file: Input file (or file contents, as given by DictReader) \
+                           with reference captions
     :type reference_file: Path | str | list[dict[str, str]]
-    :param nb_reference_captions: Number of reference captions.
+    :param nb_reference_captions: Number of reference captions
     :type nb_reference_captions: int
-    :return: Evaluated metrics.
-    :rtype: dict[str, float]
+    :return: A dict with keys the names of the metrics. Each metric\
+             has as value a dict, with keys `score` and `scores`. The\
+             `score` key, has as a value the score of the corresponding\
+             metric, for the whole set of files. The `scores` keys, has\
+             as a value, a dict with keys the file names of the files, and\
+             values the value of the score for the corresponding file.
+    :rtype: dict[str, dict[str, float|dict[str, float]]
     """
     prediction_file = check_and_read_csv(prediction_file)
     reference_file = check_and_read_csv(reference_file)
