@@ -1,4 +1,4 @@
-# Clotho metric evaluation
+# Audio captioning evaluation metrics
 
 This repository contains code to evaluate translation metrics on audio captioning predictions.
 
